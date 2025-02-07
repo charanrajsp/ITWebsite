@@ -11,6 +11,10 @@ app.use(cors(
      },
 ));
 app.use(express.json());
+// ✅ Default Route (Avoid "Cannot GET /" error)
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
 
 app.use("/chat", chatRoutes); // Set up chatbot routes
 
