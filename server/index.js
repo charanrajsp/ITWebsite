@@ -22,4 +22,4 @@ app.get("/", (req, res) => {
 
 const PORT =  4000; // Default to port 4000
 
-
+app.listen(PORT);
