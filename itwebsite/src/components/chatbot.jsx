@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BsChatDotsFill } from "react-icons/bs"; // Import Chat Icon
-
+import fallbackResponses from "./response";
 
 
 
@@ -18,7 +18,7 @@ const Chatbot = () => {
     const userMessage = { text: input, fromBot: false };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
-    setLoading(true);
+    
 
     try {
       const response = await fetch("http://localhost:4000/chat/v1", {
@@ -27,12 +27,16 @@ const Chatbot = () => {
         body: JSON.stringify({ message: input }),
       });
 
+      if (!response.ok) throw new Error("API not available");
+
       const data = await response.text();
-      setMessages((prev) => [...prev, { text: data.trim(), fromBot: true }]);
+      setMessages((prev) => [...prev, { text: data, fromBot: true }]);
     } catch (error) {
-      setMessages((prev) => [...prev, { text: "⚠️ Error fetching response.", fromBot: true }]);
-    } finally {
-      setLoading(false);
+      // If API fails, use local fallback responses
+      const userMessageLower = input.toLowerCase();
+      const fallbackReply = fallbackResponses[userMessageLower] || fallbackResponses["default"];
+
+      setMessages((prev) => [...prev, { text: fallbackReply, fromBot: true }]);
     }
   };
 
