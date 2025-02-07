@@ -5,7 +5,7 @@ import chatRoutes from "./routes/chatRoutes.js"; // Import chatbot routes
 const app = express();
 app.use(cors(
   {
-    origin:['https://it-website-three.vercel.app/'],
+    origin:["*"],
     methods:['GET','POST'],
     credentials:true
      },
